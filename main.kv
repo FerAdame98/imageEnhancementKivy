@@ -1,0 +1,184 @@
+#:kivy 1.1.0
+
+
+Root:
+    ima_input: ima_input
+    img: img
+    
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: 'Cargar'
+                on_release: root.show_load()
+            Button:
+                text: 'Guardar'
+                on_release: root.show_save()
+                
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            
+            Button:
+                text: 'Ecualización'
+                on_release: 
+                    root.ecualizar()
+       
+            Button:
+                text: 'Dos puntos'
+                on_release: 
+                    root.dosPuntos(valor1.value,valor2.value,valor3.value,valor4.value)
+
+
+            Button:
+                text: 'Unsharp'
+                on_release:    
+                    root.unsharp()
+                    
+
+        BoxLayout:
+            Image:
+                id: ima_input
+                source: ''
+                text: "Original"
+            Image:
+                id: img
+                source: ''
+                text: "Modificada"
+                
+        BoxLayout:
+            size_hint_y: None
+            height: 100
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation:'horizontal'
+                Slider:
+                    id: valor1
+                    visible:True
+                    min:0
+                    max:255
+                    value:50
+                    size_hint_x:1 if self.visible else 0
+                    opacity:1 if self.visible else 0
+                    disabled: not self.visible
+                    on_value: 
+                        tv1.text=str(self.value)
+                        root.dosPuntos(valor1.value,valor2.value,valor3.value,valor4.value)
+                Label:
+                    id:tv1
+                    text: "r1"
+                    visible: valor1.visible
+                    opacity:1 if self.visible else 0
+                    
+            BoxLayout:
+                orientation:'horizontal'
+                Slider:
+                    id: valor2
+                    visible:True
+                    min:0
+                    max:255
+                    value:50
+                    size_hint_x:1 if self.visible else 0
+                    opacity:1 if self.visible else 0
+                    disabled: not self.visible
+                    on_value: 
+                        tv2.text=str(self.value)
+                        root.dosPuntos(valor1.value,valor2.value,valor3.value,valor4.value)
+                Label:
+                    id:tv2
+                    text:"s1"
+                    visible: valor2.visible
+                    opacity:1 if self.visible else 0
+                    
+            BoxLayout:
+                orientation:'horizontal'
+                Slider:
+                    id: valor3
+                    visible:True
+                    min:0
+                    max:255
+                    value:100
+                    size_hint_x:1 if self.visible else 0
+                    opacity:1 if self.visible else 0
+                    disabled: not self.visible
+                    on_value: 
+                        tv3.text=str(self.value)
+                        root.dosPuntos(valor1.value,valor2.value,valor3.value,valor4.value)
+                Label:
+                    id:tv3
+                    text:"r2"
+                    visible: valor3.visible
+                    opacity:1 if self.visible else 0
+            
+            BoxLayout:
+                orientation:'horizontal'
+                Slider:
+                    id: valor4
+                    visible:True
+                    min:0
+                    max:255
+                    value:100
+                    size_hint_x:1 if self.visible else 0
+                    opacity:1 if self.visible else 0
+                    disabled: not self.visible
+                    on_value: 
+                        tv4.text=str(self.value)
+                        root.dosPuntos(valor1.value,valor2.value,valor3.value,valor4.value)
+                Label:
+                    id:tv4
+                    text:"r2"
+                    visible: valor4.visible
+                    opacity:1 if self.visible else 0
+                
+                
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancelar"
+                on_release: root.cancel()
+
+            Button:
+                text: "Cargar"
+                on_release: root.load(filechooser.selection,filechooser.path)
+
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            #rootpath: '/storage/emulated/0/' if platform == 'android' else '/'
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancelar"
+                on_release: root.cancel()
+
+            Button:
+                text: "Guardar"
+                on_release: root.save(filechooser.path,text_input.text)
